@@ -1,10 +1,16 @@
 package ru.ifmo.rss;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.CharacterPickerDialog;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
     @Override
@@ -14,6 +20,17 @@ public class MainActivity extends Activity {
 
         ListView view = (ListView)findViewById(R.id.feedList);
         new DownloadFeed(view, this).execute("http://bash.im/rss/");
+        final Context context = this;
+        final Intent intent = new Intent(this, PreviewActivity.class);
+        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FeedItemsAdapter adapter = (FeedItemsAdapter) parent.getAdapter();
+                FeedItem item = (FeedItem) adapter.getItem(position);
+                intent.putExtra(PreviewActivity.PREVIEW_URL, item.getLink());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
