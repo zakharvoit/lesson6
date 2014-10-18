@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -52,8 +53,11 @@ public class DownloadFeed extends AsyncTask<String, Void, List<FeedItem>> {
     protected void onPostExecute(List<FeedItem> feedItems) {
         super.onPostExecute(feedItems);
 
-        view.setAdapter(new FeedItemsAdapter(feedItems, context));
-
         dialog.dismiss();
+        if (feedItems == null) {
+            Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show();
+        } else {
+            view.setAdapter(new FeedItemsAdapter(feedItems, context));
+        }
     }
 }
