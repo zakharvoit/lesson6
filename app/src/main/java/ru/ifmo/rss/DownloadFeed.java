@@ -1,5 +1,6 @@
 package ru.ifmo.rss;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -16,6 +17,7 @@ import java.util.List;
 public class DownloadFeed extends AsyncTask<String, Void, List<FeedItem>> {
     private final ListView view;
     private final Context context;
+    private ProgressDialog dialog;
 
     public DownloadFeed(ListView view, Context context) {
         this.view = view;
@@ -25,6 +27,12 @@ public class DownloadFeed extends AsyncTask<String, Void, List<FeedItem>> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+        dialog = new ProgressDialog(context);
+        dialog.setMessage("Downloading...");
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     @Override
@@ -45,5 +53,7 @@ public class DownloadFeed extends AsyncTask<String, Void, List<FeedItem>> {
         super.onPostExecute(feedItems);
 
         view.setAdapter(new FeedItemsAdapter(feedItems, context));
+
+        dialog.dismiss();
     }
 }
