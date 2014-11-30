@@ -1,6 +1,7 @@
 package ru.ifmo.rss;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class FeedItemsAdapter extends BaseAdapter {
 
         FeedItem item = items.get(position);
         title.setText(item.getTitle());
-        description.setText(item.getDescription());
+        description.setText(Html.fromHtml(item.getDescription()));
 
         return convertView;
     }
