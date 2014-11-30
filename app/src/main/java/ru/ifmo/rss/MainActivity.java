@@ -14,7 +14,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         ListView view = (ListView)findViewById(R.id.feedList);
-        new DownloadFeed(view, this).execute("http://bash.im/rss/");
+        new DownloadFeed(view, this).execute("http://echo.msk.ru/interview/rss-fulltext.xml");
         final Intent intent = new Intent(this, PreviewActivity.class);
         view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
