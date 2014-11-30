@@ -7,10 +7,12 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParserException;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * @author Zakhar Voit (zakharvoit@gmail.com)
@@ -39,10 +41,12 @@ public class DownloadFeed extends AsyncTask<String, Void, List<FeedItem>> {
     @Override
     protected List<FeedItem> doInBackground(String... params) {
         try {
-            return FeedParser.parseFeed(params[0]);
-        } catch (IOException e) {
+            return FeedParser.parse(params[0]);
+        } catch (ParserConfigurationException e) {
             Log.d("APP", e.getMessage());
-        } catch (XmlPullParserException e) {
+        } catch (SAXException e) {
+            Log.d("APP", e.getMessage());
+        } catch (IOException e) {
             Log.d("APP", e.getMessage());
         }
 

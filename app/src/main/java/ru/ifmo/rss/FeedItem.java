@@ -34,4 +34,37 @@ public class FeedItem {
                 ", description='" + description + '\'' +
                 '}';
     }
+
+    public static class Builder {
+        private String link;
+        private String title;
+        private String description;
+
+        public Builder setLink(String link) {
+            this.link = link;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder clear() {
+            this.link = null;
+            this.title = null;
+            this.description = null;
+
+            return this;
+        }
+
+        public FeedItem createFeedItem() {
+            return new FeedItem(link, title, description);
+        }
+    }
 }
