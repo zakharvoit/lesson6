@@ -6,9 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ru.ifmo.rss.feed.FeedItem;
 
 /**
@@ -20,11 +17,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String FEED_TABLE = "feed";
     private static final String ID_KEY = "_id";
     private static final String ID_KEY_TYPE = "integer primary key";
-    private static final String TITLE_KEY = "title";
+    public static final String TITLE_KEY = "title";
     private static final String TITLE_KEY_TYPE = "text";
     public static final String LINK_KEY = "link";
     private static final String LINK_KEY_TYPE = "text";
-    private static final String DESCRIPTION_KEY = "description";
+    public static final String DESCRIPTION_KEY = "description";
     private static final String DESCRIPTION_KEY_TYPE = "text";
 
     public DatabaseHandler(Context context) {
@@ -82,17 +79,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
 
         return cursor;
-    }
-
-    public int getItemsCount() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select * from " + FEED_TABLE, null);
-        int count = cursor.getCount();
-
-        db.close();
-        cursor.close();
-
-        return count;
     }
 
     public void clearFeeds() {

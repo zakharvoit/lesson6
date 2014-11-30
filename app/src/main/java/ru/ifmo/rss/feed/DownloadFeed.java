@@ -1,14 +1,11 @@
 package ru.ifmo.rss.feed;
 
-import android.app.LauncherActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Adapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import org.xml.sax.SAXException;
@@ -76,11 +73,8 @@ public class DownloadFeed extends AsyncTask<String, Void, List<FeedItem>> {
 
             Cursor cursor = handler.getItems();
 
-            String[] from = { "title", "link", "description" };
-            int[] to = { android.R.id.text1, android.R.id.text2, android.R.id.text2 };
-            SimpleCursorAdapter adapter = new SimpleCursorAdapter(context,
-                    android.R.layout.simple_list_item_2, cursor,
-                    from, to, 0);
+            FeedCursorAdapter adapter = new FeedCursorAdapter(context,
+                    cursor, 0);
             view.setAdapter(adapter);
         }
     }

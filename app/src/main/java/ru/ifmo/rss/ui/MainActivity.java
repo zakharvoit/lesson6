@@ -6,12 +6,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 import ru.ifmo.rss.db.DatabaseHandler;
 import ru.ifmo.rss.feed.DownloadFeed;
-import ru.ifmo.rss.feed.FeedItem;
 import ru.ifmo.rss.R;
 
 public class MainActivity extends Activity {
@@ -26,7 +25,7 @@ public class MainActivity extends Activity {
         view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SimpleCursorAdapter adapter = (SimpleCursorAdapter) parent.getAdapter();
+                CursorAdapter adapter = (CursorAdapter) parent.getAdapter();
                 Cursor cursor = (Cursor) adapter.getItem(position);
                 intent.putExtra(PreviewActivity.PREVIEW_URL,
                         cursor.getString(cursor.getColumnIndex(DatabaseHandler.LINK_KEY)));
