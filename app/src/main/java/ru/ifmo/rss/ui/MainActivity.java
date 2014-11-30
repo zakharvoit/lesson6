@@ -1,11 +1,18 @@
-package ru.ifmo.rss;
+package ru.ifmo.rss.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+
+import ru.ifmo.rss.db.DatabaseHandler;
+import ru.ifmo.rss.feed.DownloadFeed;
+import ru.ifmo.rss.feed.FeedItem;
+import ru.ifmo.rss.R;
 
 public class MainActivity extends Activity {
     @Override
@@ -19,9 +26,10 @@ public class MainActivity extends Activity {
         view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FeedItemsAdapter adapter = (FeedItemsAdapter) parent.getAdapter();
-                FeedItem item = (FeedItem) adapter.getItem(position);
-                intent.putExtra(PreviewActivity.PREVIEW_URL, item.getLink());
+                SimpleCursorAdapter adapter = (SimpleCursorAdapter) parent.getAdapter();
+                Cursor cursor = (Cursor) adapter.getItem(position);
+                intent.putExtra(PreviewActivity.PREVIEW_URL,
+                        cursor.getString(cursor.getColumnIndex(DatabaseHandler.LINK_KEY)));
                 startActivity(intent);
             }
         });

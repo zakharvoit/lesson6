@@ -1,4 +1,4 @@
-package ru.ifmo.rss;
+package ru.ifmo.rss.feed;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;

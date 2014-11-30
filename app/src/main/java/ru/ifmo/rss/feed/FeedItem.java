@@ -1,4 +1,4 @@
-package ru.ifmo.rss;
+package ru.ifmo.rss.feed;
 
 /**
  * @author Zakhar Voit (zakharvoit@gmail.com)

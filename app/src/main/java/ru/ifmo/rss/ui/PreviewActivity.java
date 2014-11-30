@@ -1,8 +1,10 @@
-package ru.ifmo.rss;
+package ru.ifmo.rss.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
+
+import ru.ifmo.rss.R;
 
 
 public class PreviewActivity extends Activity {
