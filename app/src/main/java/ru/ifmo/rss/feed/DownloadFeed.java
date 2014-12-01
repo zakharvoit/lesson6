@@ -11,6 +11,7 @@ import android.widget.Toast;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,14 +21,16 @@ import ru.ifmo.rss.db.DatabaseHandler;
 /**
  * @author Zakhar Voit (zakharvoit@gmail.com)
  */
-public class DownloadFeed extends AsyncTask<String, Void, List<FeedItem>> {
+public class DownloadFeed extends AsyncTask<Void, Void, List<FeedItem>> {
     private final ListView view;
     private final Context context;
     private ProgressDialog dialog;
+    private DatabaseHandler handler;
 
     public DownloadFeed(ListView view, Context context) {
         this.view = view;
         this.context = context;
+        this.handler = new DatabaseHandler(context);
     }
 
     @Override
@@ -42,9 +45,19 @@ public class DownloadFeed extends AsyncTask<String, Void, List<FeedItem>> {
     }
 
     @Override
-    protected List<FeedItem> doInBackground(String... params) {
+    protected List<FeedItem> doInBackground(Void... params) {
         try {
-            return FeedParser.parse(params[0]);
+            List<FeedItem> result = new ArrayList<FeedItem>();
+            Cursor cursor = handler.getSubscriptions();
+
+            if (cursor.moveToFirst()) {
+                do {
+                    String url = cursor.getString(cursor.getColumnIndex(DatabaseHandler.SUBSCRIPTION_KEY));
+                    result.addAll(FeedParser.parse(url));
+                } while (cursor.moveToNext());
+            }
+
+            return result;
         } catch (ParserConfigurationException e) {
             Log.d("APP", e.getMessage());
         } catch (SAXException e) {
@@ -62,10 +75,8 @@ public class DownloadFeed extends AsyncTask<String, Void, List<FeedItem>> {
 
         dialog.dismiss();
         if (feedItems == null) {
-            Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Feed loading error", Toast.LENGTH_SHORT).show();
         } else {
-            DatabaseHandler handler = new DatabaseHandler(context);
-
             handler.clearFeeds();
             for (FeedItem item : feedItems) {
                 handler.addItem(item);

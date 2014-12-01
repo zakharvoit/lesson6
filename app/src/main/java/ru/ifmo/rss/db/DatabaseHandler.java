@@ -12,17 +12,23 @@ import ru.ifmo.rss.feed.FeedItem;
  * @author Zakhar Voit (zakharvoit@gmail.com)
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int VERSION = 3;
+    private static final int VERSION = 6;
     private static final String DB_NAME = "rssDb";
-    private static final String FEED_TABLE = "feed";
     private static final String ID_KEY = "_id";
     private static final String ID_KEY_TYPE = "integer primary key";
+
+    private static final String FEED_TABLE = "feed";
     public static final String TITLE_KEY = "title";
     private static final String TITLE_KEY_TYPE = "text";
     public static final String LINK_KEY = "link";
     private static final String LINK_KEY_TYPE = "text";
     public static final String DESCRIPTION_KEY = "description";
     private static final String DESCRIPTION_KEY_TYPE = "text";
+
+    private static final String SUBSCRIPTIONS_TABLE = "subscriptions";
+    public static final String SUBSCRIPTION_KEY = "subscription";
+    private static final String SUBSCRIPTION_KEY_TYPE = "text";
+
 
     public DatabaseHandler(Context context) {
         super(context, DB_NAME, null, VERSION);
@@ -31,26 +37,47 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         createFeedsTable(sqLiteDatabase);
+        createSubscriptionsTable(sqLiteDatabase);
+
+        preinstallSubscriptions(sqLiteDatabase);
     }
 
-    private void createFeedsTable(SQLiteDatabase sqLiteDatabase) {
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        dropFeedsTable(sqLiteDatabase);
+        dropSubscriptionsTable(sqLiteDatabase);
+        onCreate(sqLiteDatabase);
+    }
+
+    private void createFeedsTable(SQLiteDatabase db) {
         String createFeedTable = "create table " + FEED_TABLE + " ("
                 + ID_KEY + " " + ID_KEY_TYPE + ", "
                 + TITLE_KEY + " " + TITLE_KEY_TYPE + ", "
                 + LINK_KEY + " " + LINK_KEY_TYPE + ", "
                 + DESCRIPTION_KEY + " " + DESCRIPTION_KEY_TYPE
                 + ")";
-        sqLiteDatabase.execSQL(createFeedTable);
+        db.execSQL(createFeedTable);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        dropFeedsTable(sqLiteDatabase);
-        onCreate(sqLiteDatabase);
+    private void createSubscriptionsTable(SQLiteDatabase db) {
+        String createTable = "create table " + SUBSCRIPTIONS_TABLE + " ("
+                + ID_KEY + " " + ID_KEY_TYPE + ", "
+                + SUBSCRIPTION_KEY + " " + SUBSCRIPTION_KEY_TYPE
+                + ")";
+        db.execSQL(createTable);
+
+    }
+
+    private void preinstallSubscriptions(SQLiteDatabase db) {
+        addSubscription("http://echo.msk.ru/interview/rss-fulltext.xml", db);
     }
 
     private void dropFeedsTable(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("drop table if exists " + FEED_TABLE);
+    }
+
+    private void dropSubscriptionsTable(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL("drop table if exists " + SUBSCRIPTIONS_TABLE);
     }
 
     private static ContentValues itemToValues(FeedItem item) {
@@ -62,6 +89,37 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return values;
     }
 
+    public void addSubscription(String url) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        addSubscription(url, db);
+        db.close();
+    }
+
+    private void addSubscription(String url, SQLiteDatabase db) {
+        ContentValues values = new ContentValues();
+        values.put("subscription", url);
+        db.insert(SUBSCRIPTIONS_TABLE, null, values);
+    }
+
+    public Cursor getSubscriptions() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(SUBSCRIPTIONS_TABLE,
+                new String[]{ID_KEY, SUBSCRIPTION_KEY},
+                null, null, null, null, null, null);
+
+        cursor.moveToFirst();
+
+        db.close();
+
+        return cursor;
+    }
+
+    public void removeSubscription(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(SUBSCRIPTIONS_TABLE, ID_KEY + "=?", new String[]{Long.toString(id)});
+        db.close();
+    }
+
     public void addItem(FeedItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(FEED_TABLE, null, itemToValues(item));
@@ -71,7 +129,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public Cursor getItems() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(FEED_TABLE,
-                new String[] { ID_KEY, TITLE_KEY, LINK_KEY, DESCRIPTION_KEY },
+                new String[]{ID_KEY, TITLE_KEY, LINK_KEY, DESCRIPTION_KEY},
                 null, null, null, null, null, null);
 
         cursor.moveToFirst();

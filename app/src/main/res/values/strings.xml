@@ -3,5 +3,10 @@
 
     <string name="app_name">rss</string>
     <string name="title_activity_preview">preview</string>
+    <string name="add_subscription">Add subscription</string>
+    <string name="OK">OK</string>
+    <string name="edit_subscriptions">Edit subscriptions</string>
+    <string name="cancel">Cancel</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

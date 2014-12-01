@@ -8,9 +8,33 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_subscriptions_button"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/feedList"
+        android:layout_alignEnd="@+id/feedList"
+        android:text="@string/edit_subscriptions"
+        android:onClick="onAddSubscriptionClick"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/refresh_button"
+        android:text="@string/refresh"
+        android:onClick="onRefresh"
+        android:layout_below="@id/edit_subscriptions_button"
+        />
+
     <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/feedList" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/feedList"
+        android:layout_below="@+id/refresh_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
