@@ -10,7 +10,7 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import ru.ifmo.rss.R;
-import ru.ifmo.rss.db.DatabaseHandler;
+import ru.ifmo.rss.db.DatabaseHelper;
 
 /**
  * @author Zakhar Voit (zakharvoit@gmail.com)
@@ -36,8 +36,8 @@ public class FeedCursorAdapter extends CursorAdapter {
         TextView titleView = (TextView) row.findViewById(R.id.title);
         TextView descView = (TextView) row.findViewById(R.id.description);
 
-        String title = cursor.getString(cursor.getColumnIndex(DatabaseHandler.TITLE_KEY));
-        String description = cursor.getString(cursor.getColumnIndex(DatabaseHandler.DESCRIPTION_KEY));
+        String title = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TITLE_KEY));
+        String description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.DESCRIPTION_KEY));
 
         titleView.setText(Html.fromHtml(title));
         descView.setText(Html.fromHtml(description));

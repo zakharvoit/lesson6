@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import ru.ifmo.rss.db.DatabaseHandler;
+import ru.ifmo.rss.db.DatabaseHelper;
 
 /**
  * @author Zakhar Voit (zakharvoit@gmail.com)
@@ -27,7 +27,7 @@ public class SubscriptionCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        String string = cursor.getString(cursor.getColumnIndex(DatabaseHandler.SUBSCRIPTION_KEY));
+        String string = cursor.getString(cursor.getColumnIndex(DatabaseHelper.SUBSCRIPTION_KEY));
         ((TextView) view).setText(Html.fromHtml(string));
     }
 }

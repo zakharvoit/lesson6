@@ -22,6 +22,11 @@
             android:name=".ui.PreviewActivity"
             android:label="@string/title_activity_preview" >
         </activity>
+
+        <provider
+            android:authorities="ru.ifmo.rss.contentprovider"
+            android:name=".db.MyContentProvider"
+            android:exported="false" />
     </application>
 
 </manifest>
