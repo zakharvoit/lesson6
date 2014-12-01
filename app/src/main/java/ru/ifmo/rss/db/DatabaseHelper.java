@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * @author Zakhar Voit (zakharvoit@gmail.com)
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 6;
+    private static final int VERSION = 7;
     private static final String DB_NAME = "rssDb";
     public static final String ID_KEY = "_id";
     public static final String ID_KEY_TYPE = "integer primary key";

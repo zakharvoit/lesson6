@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
@@ -18,9 +19,9 @@ import android.widget.ListView;
 
 import ru.ifmo.rss.db.DatabaseHelper;
 import ru.ifmo.rss.db.MyContentProvider;
-import ru.ifmo.rss.feed.DownloadFeed;
 import ru.ifmo.rss.R;
 import ru.ifmo.rss.feed.FeedCursorAdapter;
+import ru.ifmo.rss.feed.FeedService;
 import ru.ifmo.rss.subsriptions.SubscriptionCursorAdapter;
 
 public class MainActivity extends Activity
@@ -122,8 +123,10 @@ public class MainActivity extends Activity
         dialog.show();
     }
 
-   public void onRefresh(View view) {
-        new DownloadFeed(this).execute();
+    public void onRefresh(View view) {
+        Log.d("REFRESH", "pressed");
+        Intent intent = new Intent(this, FeedService.class);
+        startService(intent);
     }
 
     @Override

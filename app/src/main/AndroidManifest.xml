@@ -27,6 +27,8 @@
             android:authorities="ru.ifmo.rss.contentprovider"
             android:name=".db.MyContentProvider"
             android:exported="false" />
+
+        <service android:name=".feed.FeedService" />
     </application>
 
 </manifest>
